@@ -3,6 +3,7 @@ using ExchangeRates.Core.Entities;
 using ExchangeRates.Core.Interfaces;
 using ExchangeRates.Infrastructure.DTOs;
 using ExchangeRates.Infrastructure.Helpers;
+using ExchangeRates.Infrastructure.Options;
 using ExchangeRates.Infrastructure.Services.Models;
 using Microsoft.Extensions.Options;
 using System;

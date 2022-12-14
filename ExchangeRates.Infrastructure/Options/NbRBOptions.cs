@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ExchangeRates.Infrastructure
+namespace ExchangeRates.Infrastructure.Options
 {
     public sealed class NbRBOptions
     {
