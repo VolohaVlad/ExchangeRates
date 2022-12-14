@@ -2,16 +2,14 @@
 using ExchangeRates.Client.Properties;
 using ExchangeRates.Client.ViewModels;
 using LiveCharts;
-using LiveCharts.Configurations;
 using LiveCharts.Wpf;
-using ScottPlot.Renderable;
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using System.Windows.Media;
 
 namespace ExchangeRates.Client
 {
@@ -24,56 +22,12 @@ namespace ExchangeRates.Client
 
         public MainViewModel ViewModel { get; private set; }
 
-        public SeriesCollection SeriesCollection { get; private set; }
-        public Func<double, string> YFormatter { get; private set; }
-        public Func<double, string> XFormatter { get; private set; }
-
-        public double Max { get; private set; }
-        public double Min { get; private set; }
-
-        public string YAxisName { get; private set; }
-
         public MainWindow(IApiService apiService)
         {
             InitializeComponent();
             _apiService = apiService;
-            DataContext = this;
             ViewModel = new MainViewModel(Settings.Default.Currency, Settings.Default.Start, Settings.Default.End);
-
-            var dayConfig = Mappers.Xy<ChartModel>()
-                   .X(dayModel => dayModel.DateTime.Ticks)
-                   .Y(dayModel => dayModel.Value)
-                   .Fill(item =>
-                   {
-                       if (item.Value == Max)
-                       {
-                           return new SolidColorBrush(Color.FromRgb(238, 83, 80));
-                       }
-                       if (item.Value == Min)
-                       {
-                           return new SolidColorBrush(Color.FromRgb(255, 255, 0));
-                       }
-
-                       return default;
-                   })
-                   .Stroke(item =>
-                   {
-                       if (item.Value == Max)
-                       {
-                           return new SolidColorBrush(Color.FromRgb(238, 83, 80));
-                       }
-                       if (item.Value == Min)
-                       {
-                           return new SolidColorBrush(Color.FromRgb(255, 255, 0));
-                       }
-
-                       return default;
-                   });
-
-            SeriesCollection = new SeriesCollection(dayConfig);
-
-            YFormatter = value => value.ToString();
-            XFormatter = value => new DateTime((long)value).ToString("yyyy-MM:dd");
+            DataContext = ViewModel;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -91,31 +45,7 @@ namespace ExchangeRates.Client
                     throw new ArgumentException("Can't show chart for one day");
                 }
 
-                ViewModel.Rates = new ObservableCollection<RateViewModel>(rates.Select(x => new RateViewModel
-                {
-                    Date = x.Date,
-                    Amount = x.Amount,
-                    Currency = x.Currency,
-                    Value = x.Value,
-                }));
-
-                var points = ViewModel.Rates.Select(x =>
-                    new ChartModel
-                    (
-                        DateTime.Parse(x.Date, CultureInfo.InvariantCulture),
-                         ((double)x.Value.Value
-                    )));
-                Max = points.Max(x => x.Value);
-                Min = points.Min(x => x.Value);
-                YAxisName = ViewModel.SelectedCurrency == "BTC"
-                    ? $"USD per {ViewModel.Rates.FirstOrDefault()?.Amount}"
-                    : $"BelRub per {ViewModel.Rates.FirstOrDefault()?.Amount}";
-                SeriesCollection.Clear();
-
-                SeriesCollection.Add(new LineSeries
-                {
-                    Values = new ChartValues<ChartModel>(points),
-                });
+                ViewModel.SetNewRates(rates);
             }
             catch (ArgumentException ex)
             {

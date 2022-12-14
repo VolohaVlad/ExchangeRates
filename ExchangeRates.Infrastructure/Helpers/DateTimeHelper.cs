@@ -16,6 +16,11 @@ namespace ExchangeRates.Infrastructure.Helpers
             return new DateTime(dateTime.Year, dateTime.Month, 1, 0, 0, 0).AddMonths(1).AddDays(-1);
         }
 
+        public static DateTime ToDayStart(this DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0);
+        }
+
         public static string ToCacheKeyFormat(this DateTime dateTime)
         {
             return dateTime.ToString(CacheKey.DateFormat);

@@ -21,14 +21,6 @@ namespace ExchangeRates.Client
                     configuration
                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
-
-
-                    var configurationRoot = configuration.Build();
-
-                    var options = new ApiOptions();
-                    configurationRoot.GetSection(nameof(ApiOptions))
-                                     .Bind(options);
-                    //configurationRoot.GetSection(ApiOptions.SectionName).Get<ApiOptions>();
                 })
                 .ConfigureServices((hostingContext, services) =>
                 {

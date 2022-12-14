@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ExchangeRates.Core.Entities;
 using ExchangeRates.Infrastructure.DTOs;
+using ExchangeRates.Infrastructure.Helpers;
 using System;
 using System.Globalization;
 
@@ -27,7 +28,7 @@ namespace ExchangeRates.Infrastructure
             CreateMap<CoinRate, Rate>()
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => decimal.Parse(src.PriceUsd, NumberStyles.Currency, new CultureInfo("en-US"))))
                 .ForMember(dest => dest.Currency, opt => opt.Ignore())
-                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date == null ? new DateTime(src.Time) : src.Date.Value))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date == null ? new DateTime(src.Time).ToDayStart() : src.Date.Value.ToDayStart()))
                 .ForMember(dest => dest.Amount, opt => opt.Ignore());
         }
     }

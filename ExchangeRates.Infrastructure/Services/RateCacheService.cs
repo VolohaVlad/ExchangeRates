@@ -67,9 +67,9 @@ namespace ExchangeRates.Infrastructure.Services
 
                         result.AddRange(newRates);
                         await _repository.AppendAsync(newRates);
-                        foreach (var r in newRates)
+                        foreach (var newRate in newRates)
                         {
-                            _memoryCache.Set(new CacheKey(r.Currency, r.Date.ToCacheKeyFormat()), r);
+                            _memoryCache.Set(new CacheKey(newRate.Currency, newRate.Date.ToCacheKeyFormat()), newRate);
                         }
                     }
                     interval.IntervalStart = null;

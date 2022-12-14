@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:p="clr-namespace:ExchangeRates.Client.Properties"
-        xmlns:local="clr-namespace:ExchangeRates.Client"
+        xmlns:local="clr-namespace:ExchangeRates.Client" xmlns:viewmodels="clr-namespace:ExchangeRates.Client.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         WindowStartupLocation="Manual"
         Title="MainWindow"
@@ -19,9 +19,9 @@
             <RowDefinition Height="360*"/>
         </Grid.RowDefinitions>
         <Grid Margin="38,30,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="738">
-            <DatePicker SelectedDate="{Binding ViewModel.StartDate}" Margin="0,0,545,0" VerticalAlignment="Center"/>
-            <DatePicker SelectedDate="{Binding ViewModel.EndDate}" Margin="237,0,303,0" VerticalAlignment="Center"/>
-            <ComboBox ItemsSource="{Binding ViewModel.CurrencyOptions}" SelectedItem="{Binding ViewModel.SelectedCurrency}" SelectedValue="{Binding ViewModel.SelectedCurrency}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="480,0,138,0" VerticalAlignment="Center" RenderTransformOrigin="0.25,-0.545"/>
+            <DatePicker SelectedDate="{Binding StartDate}" Margin="0,0,545,0" VerticalAlignment="Center"/>
+            <DatePicker SelectedDate="{Binding EndDate}" Margin="237,0,303,0" VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding CurrencyOptions}" SelectedItem="{Binding SelectedCurrency}" SelectedValue="{Binding SelectedCurrency}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="480,0,138,0" VerticalAlignment="Center" RenderTransformOrigin="0.25,-0.545"/>
             <Button x:Name="button" Content="Get Rates" Margin="631,0,0,0" RenderTransformOrigin="-0.794,0.503" Click="Button_Click"/>
         </Grid>
         <lvc:CartesianChart Name="RateChart" Grid.Row="1" Series="{Binding SeriesCollection}">
